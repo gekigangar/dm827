@@ -1,4 +1,4 @@
-#include "SerialMsg.h"
+#include "AggregateMsg.h"
 #define AM_BLINKTORADIO 6
 
 configuration SinkAppC {}
@@ -19,7 +19,7 @@ implementation {
 
     App.Packet -> AMSerial;
     App.SendControl -> AMSerial;
-    App.AMSend -> AMSerial.AMSend[AM_SERIAL_MSG];
+    App.AMSend -> AMSerial.AMSend[AM_AGGREGATE_MSG];
 
     App.ReceiveControl -> ActiveMessageC;
     App.Receive -> AMReceiverC;

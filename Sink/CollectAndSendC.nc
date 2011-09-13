@@ -1,6 +1,6 @@
 #include "Timer.h"
-#include "SerialMsg.h"
-#include "RadioMsg.h"
+#include "AggregateMsg.h"
+#include "BeaconMsg.h"
 
 module CollectAndSendC {
     uses {
@@ -26,8 +26,8 @@ implementation {
         int8_t rssi;
     } seenMotes[2];
 
-    message_t serialPacket;
-    bool serialLocked = FALSE;
+    message_t packet;
+    bool locked = FALSE;
 
     uint16_t counter = 0;
 
@@ -42,12 +42,12 @@ implementation {
 
     event void MilliTimer.fired() {
         counter++;
-        if (serialLocked) {
+        if (locked) {
             return;
         } else {
-            serial_msg_t* rcm = (serial_msg_t*)call Packet.getPayload(&serialPacket, sizeof(serial_msg_t));
+            aggregate_msg_t* rcm = (aggregate_msg_t*)call Packet.getPayload(&packet, sizeof(aggregate_msg_t));
             if (rcm == NULL) {return;}
-            if (call Packet.maxPayloadLength() < sizeof(serial_msg_t)) {
+            if (call Packet.maxPayloadLength() < sizeof(aggregate_msg_t)) {
                 return;
             }
 
@@ -55,15 +55,15 @@ implementation {
             rcm->motes[0].id = seenMotes[0].id;
             rcm->motes[0].count = seenMotes[0].msgNr;
             rcm->motes[0].rssi = seenMotes[0].rssi;
-            if (call AMSend.send(AM_BROADCAST_ADDR, &serialPacket, sizeof(serial_msg_t)) == SUCCESS) {
-                serialLocked = TRUE;
+            if (call AMSend.send(AM_BROADCAST_ADDR, &packet, sizeof(aggregate_msg_t)) == SUCCESS) {
+                locked = TRUE;
             }
         }
     }
 
     event void AMSend.sendDone(message_t* bufPtr, error_t error) {
-        if (&serialPacket == bufPtr) {
-            serialLocked = FALSE;
+        if (&packet == bufPtr) {
+            locked = FALSE;
         }
     }
 

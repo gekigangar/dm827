@@ -1,14 +1,14 @@
 COMPONENT=SinkAppC
 BUILD_EXTRA_DEPS += Sink.class
-CLEAN_EXTRA = *.class SerialMsg.java
+CLEAN_EXTRA = *.class AggregateMsg.java
 
 CFLAGS += -I$(TOSDIR)/lib/T2Hack
 
-Sink.class: $(wildcard *.java) SerialMsg.java
+Sink.class: $(wildcard *.java) AggregateMsg.java
 	javac -target 1.4 -source 1.4 *.java
 
-SerialMsg.java:
-	mig java -target=null $(CFLAGS) -java-classname=SerialMsg SerialMsg.h serial_msg -o $@
+AggregateMsg.java:
+	mig java -target=null $(CFLAGS) -java-classname=AggregateMsg AggregateMsg.h aggregate_msg -o $@
 
 
 include $(MAKERULES)

@@ -10,7 +10,7 @@ public class Sink implements MessageListener {
   
   public Sink(MoteIF moteIF) {
     this.moteIF = moteIF;
-    this.moteIF.registerListener(new SerialMsg(), this);
+    this.moteIF.registerListener(new AggregateMsg(), this);
   }
 
   public int rssiToDbm(int rssi){
@@ -19,7 +19,7 @@ public class Sink implements MessageListener {
 
 
   public void messageReceived(int to, Message message) {
-    SerialMsg msg = (SerialMsg)message;
+    AggregateMsg msg = (AggregateMsg)message;
     System.out.println(
         "" + msg.get_counter() + ": id=" + 
         msg.getElement_motes_id(0) + 
