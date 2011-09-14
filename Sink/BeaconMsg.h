@@ -5,7 +5,7 @@
 typedef nx_struct beacon_msg {
   nx_uint16_t nodeid;
   nx_uint16_t counter;
-} RadioMsg;
+} beacon_msg_t;
 
 
 #endif

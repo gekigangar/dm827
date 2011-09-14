@@ -52,6 +52,7 @@ implementation {
             }
 
             rcm->counter = counter;
+            rcm->from = TOS_NODE_ID;
             rcm->motes[0].id = seenMotes[0].id;
             rcm->motes[0].count = seenMotes[0].msgNr;
             rcm->motes[0].rssi = seenMotes[0].rssi;
@@ -82,8 +83,8 @@ implementation {
     event void ReceiveControl.stopDone(error_t err) {}
 
     event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len){
-        if (len == sizeof(RadioMsg)) {
-            RadioMsg* pkt = (RadioMsg*)payload;
+        if (len == sizeof(beacon_msg_t)) {
+            beacon_msg_t* pkt = (beacon_msg_t*)payload;
             seenMotes[0].id = pkt->nodeid;
             seenMotes[0].msgNr = pkt->counter;
             seenMotes[0].rssi = getRssi(msg);

@@ -21,8 +21,9 @@ public class Sink implements MessageListener {
   public void messageReceived(int to, Message message) {
     AggregateMsg msg = (AggregateMsg)message;
     System.out.println(
-        "" + msg.get_counter() + ": id=" + 
-        msg.getElement_motes_id(0) + 
+        "From=" + msg.get_from() + 
+        " msgNr=" + msg.get_counter() + 
+        " id=" + msg.getElement_motes_id(0) + 
         " count=" + msg.getElement_motes_count(0) +
         " rssi=" + msg.getElement_motes_rssi(0));
   }
